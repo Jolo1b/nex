@@ -1,4 +1,4 @@
-﻿function check-cmd(){
+﻿function start-cmd(){
     try {
         Get-Process -Name cmd -ErrorAction Stop
         Write-Host "process cmd exist"
@@ -7,22 +7,20 @@
     }
 }
 
-$command = "C:/Users/$env:username/batchrc.bat"
-if(test-path "C:/Users/$env:username/batchrc.bat"){
-    check-cmd
+function start-check(){
+    start-cmd
 
     while($true){
-        check-cmd
+        start-cmd
         Wait-Event -Timeout 10
     }
+}
+
+$command = "C:/Users/$env:username/batchrc.bat"
+if(test-path $command){
+    start-check   
 } else {
     Write-Host "`a"
-    Wait-Event -Timeout 1
-    Write-Host "`a"
-    Wait-Event -Timeout 1
-    Write-Host "`a"
-    Wait-Event -Timeout 1
-    Write-Host "`a"
-    Wait-Event -Timeout 1
-    Write-Host "`a"
+    $command = "cmd"
+    start-check    
 }
